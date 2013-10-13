@@ -26,7 +26,7 @@
                 <div class="navbar-collapse collapse" style="max-width:812px;min-width:480px;margin-left:auto;margin-right:auto;">
                   <ul class="nav navbar-nav">
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="#leaders">Leaderboards</a></li>
+                    <li><a href="leaderboard.html">Leaderboards</a></li>
                     <li class="active"><a href="play.html">Play</a></li>
                   </ul>
                 </div>
@@ -85,6 +85,7 @@
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&v=3&libraries=geometry"></script>
         <script>
         function initialize() {
+            console.warn($('#time').val());
           var mapOptions = {
             zoom: 6,
             mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -142,12 +143,15 @@
               }
 
               if (google.maps.geometry.spherical.computeDistanceBetween(newPointOne, B) < 15) {
+                  alert("You just finished the race! Click the save button!");
                   endTime = Date.now();
-                  alert('You finished the race! Hit the save button');
                   console.log('end time' + endTime);
-                  finalTime = (endTime - startTime) / 1000;
+                  finalTime = endTime - startTime;
                   console.warn('final time' + finalTime);
-                  $('#time').attr('value', finalTime);
+                  console.log($('#time').attr('value'));
+                  $('#time').val(finalTime);
+                  console.log($('#time').attr('value'));
+
               }
           });
 
