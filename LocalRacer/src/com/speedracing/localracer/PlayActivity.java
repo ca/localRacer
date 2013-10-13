@@ -1,5 +1,6 @@
 package com.speedracing.localracer;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import android.app.ActionBar;
@@ -17,6 +18,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class PlayActivity extends FragmentActivity implements
@@ -163,12 +166,54 @@ public class PlayActivity extends FragmentActivity implements
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_play_dummy,
-					container, false);
-			TextView dummyTextView = (TextView) rootView
+			View rootView= null;
+			if(getArguments().getInt(ARG_SECTION_NUMBER)==2){
+				rootView = inflater.inflate(R.layout.fragment_play_dummy_leaderboard,container, false);
+				/*TextView dummyTextView = (TextView) rootView
 					.findViewById(R.id.section_label);
-			dummyTextView.setText(Integer.toString(getArguments().getInt(
-					ARG_SECTION_NUMBER)));
+				dummyTextView.setText(Integer.toString(getArguments().getInt(
+						ARG_SECTION_NUMBER)));*/
+				ArrayAdapter<String> adapter;
+				ArrayList<String> listItems=new ArrayList<String>();
+				listItems.add("Balls");
+				listItems.add("Booyah");
+				listItems.add("Balls");
+				listItems.add("Booyah");
+				listItems.add("Balls");
+				listItems.add("Booyah");
+				listItems.add("Balls");
+				listItems.add("Booyah");
+				listItems.add("Balls");
+				listItems.add("Booyah");
+				listItems.add("Balls");
+				listItems.add("Booyah");
+				listItems.add("Balls");
+				listItems.add("Booyah");
+				listItems.add("Balls");
+				listItems.add("Booyah");
+				listItems.add("Balls");
+				listItems.add("Booyah");
+				listItems.add("Balls");
+				listItems.add("Booyah");
+				listItems.add("Balls");
+				listItems.add("Booyah");
+				listItems.add("Balls");
+				listItems.add("Booyah");
+				adapter=new ArrayAdapter<String>(
+						getActivity(), android.R.layout.simple_list_item_1,
+		            	listItems);
+				ListView test = (ListView) rootView;
+				test.setAdapter(adapter);
+			}
+			else{
+				rootView = inflater.inflate(R.layout.fragment_play_dummy, container, false);
+				TextView dummyTextView = (TextView) rootView
+					.findViewById(R.id.section_label);
+				dummyTextView.setText(Integer.toString(getArguments().getInt(
+						ARG_SECTION_NUMBER)));
+				
+			}
+			
 			return rootView;
 		}
 	}
