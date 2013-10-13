@@ -60,7 +60,10 @@
                   <input type="text" id="time"></input>
                   <a class="btn btn-success save">Save</a>
               </div>
+              <div id="leaderboard"></div>
+              <div id="sidebar"></div>
               <div id="map-canvas"></div>
+              <br>
             </div>
           </div>
 
@@ -78,21 +81,14 @@
             <div class="form-left-col">
                 <label>Id:</label>
                 <input type="text" id="raceId" name="id" value="<%= id %>" disabled />
-                <label>Name:</label>
+                <label>Email:</label>
                 <input type="text" id="email" name="email" value="<%= email %>" required/>
-                <label>Grapes:</label>
-                <input type="text" id="grapes" name="grapes" value="<%= grapes %>"/>
-                <label>Country:</label>
-                <input type="text" id="country" name="country" value="<%= country %>"/>
-                <label>Region:</label>
-                <input type="text" id="region" name="region"  value="<%= region %>"/>
-                <label>Year:</label>
-                <input type="text" id="year" name="year"  value="<%= year %>"/>
-            </div>
-            <div class="form-right-col">
-                <img height="300" src="../pics/<%= picture %>"/>
-                <label>Notes:</label>
-                <textarea id="description" name="description"><%= description %></textarea>
+                <label>Vehicle:</label>
+                <input type="text" id="vehicle" name="vehicle" value="<%= vehicle %>"/>
+                <label>Map:</label>
+                <input type="text" id="map" name="map" value="<%= map %>"/>
+                <label>Time:</label>
+                <input type="text" id="time" name="time"  value="<%= time %>"/>
             </div>
         </script>
         <!--<script src="js/jquery-1.9.1.min.js"></script>  //ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js -->
@@ -103,111 +99,79 @@
         <script src="js/application.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&v=3&libraries=geometry"></script>
         <script>
-            var map;
-
-            function initialize() {
-              var mapOptions = {
-                zoom: 6,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-              };
-
-              map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-              // navigator.geolocation.getCurrentPosition(function(position) {
-              //
-              //             var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-              //
-              //             var infowindow = new google.maps.InfoWindow({
-              //                 map: map,
-              //                 position: geolocate,
-              //                 content:
-              //                     '<h1>Location pinned from HTML5 Geolocation!</h1>' +
-              //                     '<h2>Latitude: ' + position.coords.latitude + '</h2>' +
-              //                     '<h2>Longitude: ' + position.coords.longitude + '</h2>'
-              //             });
-              //         });
-
-                      var marker = null;
-
-                      var chicago = new google.maps.LatLng(40.485340, -74.436923);
-                      var mexico = new google.maps.LatLng(40.483659, -74.438678);
-
-                      function callBack() {
-
-                      }
-
-                      function autoUpdate() {
-                        navigator.geolocation.getCurrentPosition(function(position) {
-                          newPoint = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-                          if (marker) {
-                            // Marker already created - Move it
-                            marker.setPosition(newPoint);
-                            if (google.maps.geometry.spherical.computeDistanceBetween(newPoint, chicago) < 100) {
-                                var r = confirm("You are within 10m of a checkpoint. Maybe. Would you like to start a race?");
-                                if (r==true) {
-                                    var startTime = Date.now();
-                                    $('.col-lg-12').append('<h1>' + startTime + '</h1>');
-                                    navigator.geolocation.getCurrentPosition(function(position) {
-                                        newNewPoint = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                                        if (google.maps.geometry.spherical.computeDistanceBetween(newNewPoint, mexico) < 500) {
-                                            var endTime = Date.now();
-                                            var totalTime = endTime - startTime;
-                                            $('.col-lg-12').append('<h1>' + totalTime + '</h1>');
-                                            alert("Your time was:" + totalTime);
-                                        }
-                                    });
-                                }
-                            }
-                          }
-                          else {
-                            // Marker does not exist - Create it
-                            marker = new google.maps.Marker({
-                              position: newPoint,
-                              map: map
-                            });
-                          }
-                          // Center the map on the new position
-                          map.setCenter(newPoint);
-                        });
-                        // Call the autoUpdate() function every 5 seconds
-                        setTimeout(autoUpdate, 3000);
-                      }
-
-                      autoUpdate();
-
-          console.warn(google.maps.geometry.spherical.computeDistanceBetween(chicago, mexico));
-
-          var directionsService = new google.maps.DirectionsService();
-          var directionsRequest = {
-            origin: chicago,
-            destination: mexico,
-            travelMode: google.maps.DirectionsTravelMode.DRIVING,
-            unitSystem: google.maps.UnitSystem.METRIC
+        function initialize() {
+          var mapOptions = {
+            zoom: 6,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
           };
 
-          directionsService.route(
-            directionsRequest,
-            function(response, status)
-            {
-              if (status == google.maps.DirectionsStatus.OK)
-              {
-                new google.maps.DirectionsRenderer({
-                  map: map,
-                  directions: response
-                });
+          map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+        var marker = null;
+        var A = new google.maps.LatLng(40.485340, -74.436923);
+        var B = new google.maps.LatLng(40.483659, -74.438678);
+
+        function autoUpdate() {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var newPoint = new google.maps.LatLng(position.coords.latitude,
+                                                  position.coords.longitude);
+
+            if (marker) {
+              // Marker already created - Move it
+              marker.setPosition(newPoint);
+
+              if (google.maps.geometry.spherical.computeDistanceBetween(newPoint, A) < 10) {
+                  var r = confirm("You are within 10m of a checkpoint. Maybe. Would you like to start a race?");
+                  if (r==true) {
+                      var startTime = Date.now();
+                      $('.col-lg-12').append('<h1>' + startTime + '</h1>');
+                      console.warn(startTime);
+                  }
               }
-              else
-                $("#error").append("Unable to retrieve your route<br />");
+
+            } else {
+              // Marker does not exist - Create it
+              marker = new google.maps.Marker({
+                position: newPoint,
+                map: map
+              });
             }
-        );
 
+            // Center the map on the new position
+            map.setCenter(newPoint);
+          });
 
-          // Try HTML5 geolocation
+          // Call the autoUpdate() function every 5 seconds
+          setTimeout(autoUpdate, 5000);
+        }
 
+        autoUpdate();
+
+        var directionsService = new google.maps.DirectionsService();
+        var directionsRequest = {
+          origin: A,
+          destination: B,
+          travelMode: google.maps.DirectionsTravelMode.DRIVING,
+          unitSystem: google.maps.UnitSystem.METRIC
+        };
+
+        directionsService.route(
+          directionsRequest,
+          function(response, status)
+          {
+            if (status == google.maps.DirectionsStatus.OK)
+            {
+              new google.maps.DirectionsRenderer({
+                map: map,
+                directions: response
+              });
+            }
+            else
+              $("#error").append("Unable to retrieve your route<br />");
+          }
+          );
       }
-
-        google.maps.event.addDomListener(window, 'load', initialize);
+      google.maps.event.addDomListener(window, 'load', initialize);
         </script>
     </body>
 </html>

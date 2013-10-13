@@ -16,15 +16,17 @@ window.Races = Backbone.Collection.extend({
 
 var RaceListView = Backbone.View.extend({
 
-    tagName: 'ul',
+    tagName:'ul',
 
     initialize:function () {
+        console.log("RaceListView init");
         this.model.bind("reset", this.render, this);
     },
 
     render:function (eventName) {
-        _.each(this.model.models, function (race) {
-            $(this.el).append(new RaceListItemView({model:race}).render().el);
+        console.log("RaceListView Render");
+        _.each(this.model.models, function (model) {
+            $('#leaderboard').append(new RaceListItemView({model:model}).render().el);
         }, this);
         return this;
     }
@@ -33,15 +35,15 @@ var RaceListView = Backbone.View.extend({
 
 var RaceListItemView = Backbone.View.extend({
 
-    tagName: 'li',
+    tagName:'li',
 
     template:_.template($('#tpl-race-list-item').html()),
 
     render:function (eventName) {
+        console.log("RaceListItemView Render");
         $(this.el).html(this.template(this.model.toJSON()));
         return this;
     }
-
 });
 
 var RaceView = Backbone.View.extend({
@@ -66,7 +68,8 @@ var RaceView = Backbone.View.extend({
       });
   },
 
-  render: function () {
+  render: function (eventName) {
+      console.log("RaceView Render");
       console.warn(this.model.toJSON());
       $(this.el).html(this.template(this.model.toJSON()));
       return this;
@@ -82,7 +85,7 @@ var RaceView = Backbone.View.extend({
     });
 
     if (this.model.isNew()) {
-      app.raceList.create(this.model);
+      this.model.save();
     } else {
       this.model.save();
     }
@@ -100,8 +103,10 @@ var AppRouter = Backbone.Router.extend({
     list:function () {
 		console.log("list()");
         this.raceList = new Races();
-        this.raceListView = new RaceView({model:this.raceList, el:'.test'});
+        console.warn(this.raceList);
+        this.raceListView = new RaceListView({model:this.raceList, el:'#leaderboard'});
         this.raceList.fetch();
+        $('#sidebar').html(this.raceListView.render().el);
     },
 
     raceDetails:function (id) {
@@ -110,6 +115,7 @@ var AppRouter = Backbone.Router.extend({
         this.race = this.raceList.get(id);
         if (app.raceView) app.raceView.close();
         this.raceView = new RaceView({model:this.race, el:'.test'});
+        $('#leaderboard').html(this.raceView.render().el);
     }
 });
 
