@@ -1,26 +1,39 @@
 package com.speedracing.localracer;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class PlayActivity extends FragmentActivity implements
 		ActionBar.TabListener {
@@ -104,6 +117,7 @@ public class PlayActivity extends FragmentActivity implements
 	@Override
 	public void onTabReselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
+		
 	}
 
 	/**
@@ -125,6 +139,7 @@ public class PlayActivity extends FragmentActivity implements
 			Bundle args = new Bundle();
 			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
 			fragment.setArguments(args);
+			//fragment.onCreateView(getLayoutInflater(), mViewPager, args);
 			return fragment;
 		}
 
@@ -167,41 +182,72 @@ public class PlayActivity extends FragmentActivity implements
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			View rootView= null;
-			if(getArguments().getInt(ARG_SECTION_NUMBER)==2){
+			if(getArguments().getInt(ARG_SECTION_NUMBER)==1){
+				
+				
+				
+				
+				Race r = new Race();
+				r.email = "blah";
+				r.time = "24903";
+				
+				Gson g = new Gson();
+				String jsonStr = g.toJson(r);
+				System.err.println(jsonStr);
+			}
+			else if(getArguments().getInt(ARG_SECTION_NUMBER)==2){
 				rootView = inflater.inflate(R.layout.fragment_play_dummy_leaderboard,container, false);
 				/*TextView dummyTextView = (TextView) rootView
 					.findViewById(R.id.section_label);
 				dummyTextView.setText(Integer.toString(getArguments().getInt(
 						ARG_SECTION_NUMBER)));*/
 				ArrayAdapter<String> adapter;
-				ArrayList<String> listItems=new ArrayList<String>();
-				listItems.add("Balls");
-				listItems.add("Booyah");
-				listItems.add("Balls");
-				listItems.add("Booyah");
-				listItems.add("Balls");
-				listItems.add("Booyah");
-				listItems.add("Balls");
-				listItems.add("Booyah");
-				listItems.add("Balls");
-				listItems.add("Booyah");
-				listItems.add("Balls");
-				listItems.add("Booyah");
-				listItems.add("Balls");
-				listItems.add("Booyah");
-				listItems.add("Balls");
-				listItems.add("Booyah");
-				listItems.add("Balls");
-				listItems.add("Booyah");
-				listItems.add("Balls");
-				listItems.add("Booyah");
-				listItems.add("Balls");
-				listItems.add("Booyah");
-				listItems.add("Balls");
-				listItems.add("Booyah");
+				Gson xx = new Gson();
+				ArrayList<Race> races = new ArrayList<Race>();
+				final StringBuilder total = new StringBuilder();
+				
+				Runnable runnable = new Runnable() {
+					
+					@Override
+					public void run() {
+						try {
+							HttpGet get = new HttpGet("http://hackru.alexvallorosi.com/races");
+							HttpClient client = new DefaultHttpClient();
+							HttpResponse response = client.execute(get);
+							HttpEntity entity = response.getEntity();
+					        BufferedReader in = new BufferedReader(
+					        new InputStreamReader(entity.getContent()));
+			
+					        String inputLine;
+					        while ((inputLine = in.readLine()) != null)
+					            total.append(inputLine +"\n");
+					        in.close();
+						}
+						catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				};
+				Thread bg = new Thread(runnable);
+				bg.start();
+				try {
+					bg.join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				Type listType = new TypeToken<List<Race>>(){}.getType();
+				ArrayList<Race> listItems= xx.fromJson(total.toString(), listType);
+				ArrayList<String> stringList = new ArrayList<String>();
+				
+				for (Race r : listItems) {
+					stringList.add(r.email + r.time);
+				}
+				System.out.print(Arrays.toString(listItems.toArray()));
 				adapter=new ArrayAdapter<String>(
 						getActivity(), android.R.layout.simple_list_item_1,
-		            	listItems);
+		            	stringList);
 				ListView test = (ListView) rootView;
 				test.setAdapter(adapter);
 			}
@@ -216,6 +262,13 @@ public class PlayActivity extends FragmentActivity implements
 			
 			return rootView;
 		}
+	}
+	public static class Race{
+		public String email = "";
+		public String vehicle = "";
+		public String map = "";
+		public String time = "";
+		public String _id = "";
 	}
 
 }
