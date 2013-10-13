@@ -1,5 +1,5 @@
 window.Race = Backbone.Model.extend({
-  urlRoot:"http://do.alexvallorosi.com/races",
+  urlRoot:"http://hackru.alexvallorosi.com/races",
   defaults:{
     "id":null,
     "email":"",
@@ -11,10 +11,42 @@ window.Race = Backbone.Model.extend({
 
 window.Races = Backbone.Collection.extend({
   model:Race,
-  url:"http://do.alexvallorosi.com/races"
+  url:"http://hackru.alexvallorosi.com/races"
+});
+
+var RaceListView = Backbone.View.extend({
+
+    tagName: 'ul',
+
+    initialize:function () {
+        this.model.bind("reset", this.render, this);
+    },
+
+    render:function (eventName) {
+        _.each(this.model.models, function (race) {
+            $(this.el).append(new RaceListItemView({model:race}).render().el);
+        }, this);
+        return this;
+    }
+
+});
+
+var RaceListItemView = Backbone.View.extend({
+
+    tagName: 'li',
+
+    template:_.template($('#tpl-race-list-item').html()),
+
+    render:function (eventName) {
+        $(this.el).html(this.template(this.model.toJSON()));
+        return this;
+    }
+
 });
 
 var RaceView = Backbone.View.extend({
+
+  template:_.template($('#tpl-race-details').html()),
 
   events: {
     'click .save':'saveRace'
@@ -35,6 +67,9 @@ var RaceView = Backbone.View.extend({
   },
 
   render: function () {
+      console.warn(this.model.toJSON());
+      $(this.el).html(this.template(this.model.toJSON()));
+      return this;
   },
 
   saveRace: function () {
@@ -59,12 +94,13 @@ var RaceView = Backbone.View.extend({
 var AppRouter = Backbone.Router.extend({
     routes:{
         "":"list",
-        "race/:id":"raceDetails"
+        "races/:id":"raceDetails"
     },
 
     list:function () {
 		console.log("list()");
         this.raceList = new Races();
+        this.raceListView = new RaceView({model:this.raceList, el:'.test'});
         this.raceList.fetch();
     },
 
