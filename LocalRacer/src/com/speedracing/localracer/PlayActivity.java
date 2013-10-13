@@ -33,6 +33,9 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -231,7 +234,8 @@ public class PlayActivity extends FragmentActivity implements
 				b.setOnClickListener(this);
 				//SimpleGeofence geof1 = new SimpleGeofence("start", 40.485340, -74.436923, 15, Long.MAX_VALUE, Geofence.GEOFENCE_TRANSITION_ENTER);
 				
-				
+				//WebView webview = new WebView(getActivity());
+				//webview.loadUrl("http://hackru.alexvallorosi.com/races/");
 				
 				TextView dummyTextView = (TextView) rootView
 					.findViewById(R.id.section_label);
