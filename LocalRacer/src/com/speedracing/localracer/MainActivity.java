@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ProgressBar;
 
 public class MainActivity extends Activity {
@@ -26,62 +28,13 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*mProgress = (ProgressBar) findViewById(R.id.progress_bar);
-
-        // Start lengthy operation in a background thread
-        new Thread(new Runnable() {
-            public void run() {
-                while (mProgressStatus < 100) {
-                	int x =1;
-                    mProgressStatus = doWork(x);
-
-                    // Update the progress bar
-                    mHandler.post(new Runnable() {
-                        public void run() {
-                            mProgress.setProgress(mProgressStatus);
-                        }
-                    });
-                    x++;
-                    Log.e("error", "test");
-                }
-                Log.e("error", "pass");
-                
-            }
-
-			private int doWork(int x) {
-				if(x==1){
-					if(isOnline())
-						return 50;
-				}
-				else if(x==2){
-					if(hasGPSDevice())
-						return 50;
-				}
-				return 0;
-			}
-			public boolean isOnline() {
-			    ConnectivityManager cm =
-			        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-			    NetworkInfo netInfo = cm.getActiveNetworkInfo();
-			    if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-			        return true;
-			    }
-			    return false;
-			}
-			public boolean hasGPSDevice()
-		    {
-				final LocationManager mgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-				if ( mgr == null ) 
-					return false;
-				final List<String> providers = mgr.getAllProviders();
-				if ( providers == null )
-					return false;
-		    	return providers.contains(LocationManager.GPS_PROVIDER);
-		    }
-
-        }).start();*/
         
         
+        
+    }
+    public void goToLogin(View view) {
+    	Intent intent = new Intent(this, LoginActivity.class);
+    	startActivity(intent);
     }
     
 
