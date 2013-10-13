@@ -36,7 +36,7 @@
 
         <!-- Geofence array - Longitude, Latitude, Radius -->
 
-        <div id="header"></div>
+        <div id="header"><input id="map" style="display:none;" value="1"></input></div>
 
         <div id="sidebar"></div>
 
@@ -54,10 +54,8 @@
               <img src="image/icon.png" width="150">
               <h2>Sign Up Today!</h2>
               <div class="test">
-                  <input type="text" id="email"></input>
-                  <input type="text" id="vehicle"></input>
-                  <input type="text" id="map"></input>
-                  <input type="text" id="time"></input>
+                  <input type="text" id="email" placeholder="Email"></input>
+                  <input type="text" id="vehicle" placeholder="Vehicle"></input>
                   <a class="btn btn-success save">Save</a>
               </div>
               <div id="leaderboard"></div>
@@ -109,25 +107,26 @@
 
         var marker = null;
         var A = new google.maps.LatLng(40.485340, -74.436923);
-        var B = new google.maps.LatLng(40.483659, -74.438678);
+        var B = new google.maps.LatLng(40.4844, -74.437877);
+
+        // function callBack(startTime) {
+        //     navigator.geolocation.getCurrentPosition(function(position) {
+        //         var newPoint = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        //         //CODE
+        //             return;
+        //         } else {
+        //             callBack();
+        //         }
+        //     }
+        // }
 
         function autoUpdate() {
           navigator.geolocation.getCurrentPosition(function(position) {
-            var newPoint = new google.maps.LatLng(position.coords.latitude,
-                                                  position.coords.longitude);
+            var newPoint = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
             if (marker) {
               // Marker already created - Move it
               marker.setPosition(newPoint);
-
-              if (google.maps.geometry.spherical.computeDistanceBetween(newPoint, A) < 10) {
-                  var r = confirm("You are within 10m of a checkpoint. Maybe. Would you like to start a race?");
-                  if (r==true) {
-                      var startTime = Date.now();
-                      $('.col-lg-12').append('<h1>' + startTime + '</h1>');
-                      console.warn(startTime);
-                  }
-              }
 
             } else {
               // Marker does not exist - Create it
@@ -143,6 +142,28 @@
 
           // Call the autoUpdate() function every 5 seconds
           setTimeout(autoUpdate, 5000);
+
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var newPointOne = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+              if (google.maps.geometry.spherical.computeDistanceBetween(newPointOne, A) < 15) {
+                  var r = confirm("You are nearing a checkpoint. Would you like to start a race?");
+                  if (r==true) {
+                      startTime = Date.now();
+                      $('.col-lg-12').append('<h1>' + startTime + '</h1>');
+                      console.warn(startTime);
+                  }
+              }
+
+              if (google.maps.geometry.spherical.computeDistanceBetween(newPointOne, B) < 15) {
+                  endTime = Date.now();
+                  console.log('end time' + endTime);
+                  finalTime = endTime - startTime;
+                  console.log('final time' + finalTime);
+                  $('.col-lg-12').append('<h1 id="time">Your final time is: ' + finalTime + '</h1>');
+              }
+          });
+
         }
 
         autoUpdate();
