@@ -8,5 +8,6 @@
     <string name="title_section1">Play</string>
     <string name="title_section2">Leaderboard</string>
     <string name="title_section3">Settings</string>
+    <string name="title_activity_game">GameActivity</string>
 
 </resources>

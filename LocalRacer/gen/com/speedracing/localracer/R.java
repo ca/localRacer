@@ -186,9 +186,10 @@ containing a value of this type.
         public static final int ic_plusone_tall_off_client=0x7f02001c;
     }
     public static final class id {
-        public static final int action_forgot_password=0x7f050011;
+        public static final int action_forgot_password=0x7f050013;
         public static final int action_settings=0x7f050012;
         public static final int button1=0x7f05000e;
+        public static final int button_start=0x7f050011;
         public static final int email=0x7f050008;
         public static final int hybrid=0x7f050004;
         public static final int login=0x7f05000a;
@@ -207,22 +208,25 @@ containing a value of this type.
         public static final int textView1=0x7f05000c;
     }
     public static final class layout {
-        public static final int activity_login=0x7f030000;
-        public static final int activity_main=0x7f030001;
-        public static final int activity_play=0x7f030002;
-        public static final int fragment_play_dummy=0x7f030003;
-        public static final int fragment_play_dummy_leaderboard=0x7f030004;
+        public static final int activity_game=0x7f030000;
+        public static final int activity_login=0x7f030001;
+        public static final int activity_main=0x7f030002;
+        public static final int activity_play=0x7f030003;
+        public static final int fragment_play_dummy=0x7f030004;
+        public static final int fragment_play_dummy_leaderboard=0x7f030005;
+        public static final int fragment_play_dummy_play=0x7f030006;
     }
     public static final class menu {
-        public static final int login=0x7f090000;
-        public static final int main=0x7f090001;
-        public static final int play=0x7f090002;
+        public static final int game=0x7f090000;
+        public static final int login=0x7f090001;
+        public static final int main=0x7f090002;
+        public static final int play=0x7f090003;
     }
     public static final class string {
-        public static final int action_forgot_password=0x7f060025;
+        public static final int action_forgot_password=0x7f060026;
         public static final int action_settings=0x7f06001a;
-        public static final int action_sign_in_register=0x7f060023;
-        public static final int action_sign_in_short=0x7f060024;
+        public static final int action_sign_in_register=0x7f060024;
+        public static final int action_sign_in_short=0x7f060025;
         public static final int app_name=0x7f060019;
         /**   Title for notification shown when GooglePlayServices needs to be
         enabled for a application to work. [CHAR LIMIT=70] 
@@ -314,17 +318,18 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f060012;
-        public static final int error_field_required=0x7f06002a;
-        public static final int error_incorrect_password=0x7f060029;
-        public static final int error_invalid_email=0x7f060027;
-        public static final int error_invalid_password=0x7f060028;
+        public static final int error_field_required=0x7f06002b;
+        public static final int error_incorrect_password=0x7f06002a;
+        public static final int error_invalid_email=0x7f060028;
+        public static final int error_invalid_password=0x7f060029;
         public static final int hello_world=0x7f06001b;
-        public static final int login_progress_signing_in=0x7f060026;
+        public static final int login_progress_signing_in=0x7f060027;
         /**  Strings related to login 
          */
-        public static final int prompt_email=0x7f060021;
-        public static final int prompt_password=0x7f060022;
-        public static final int title_activity_login=0x7f060020;
+        public static final int prompt_email=0x7f060022;
+        public static final int prompt_password=0x7f060023;
+        public static final int title_activity_game=0x7f060020;
+        public static final int title_activity_login=0x7f060021;
         public static final int title_activity_play=0x7f06001c;
         public static final int title_section1=0x7f06001d;
         public static final int title_section2=0x7f06001e;

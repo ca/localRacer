@@ -5,8 +5,8 @@
     android:versionName="1.0" >
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -35,6 +35,16 @@
             android:name="com.speedracing.localracer.PlayActivity"
             android:label="@string/title_activity_play" >
         </activity>
+        <activity
+            android:name="com.speedracing.localracer.GameActivity"
+            android:label="@string/title_activity_game"
+            android:parentActivityName="com.example.android.geofence.MainActivity$GeofenceSampleReceiver" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.geofence.MainActivity$GeofenceSampleReceiver" />
+        </activity>
     </application>
 
 </manifest>
+
+
