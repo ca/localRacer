@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <!-- Template the <head> -->
-        <title>Local Racer</title>
+        <title>Get There First</title>
         <link href="css/bootstrap.css" rel="stylesheet">
         <style>
               html, body, #map-canvas {
@@ -51,10 +51,22 @@
               <div class="test" style="padding-bottom:40px;">
                   <input type="text" id="email" placeholder="Email"></input>
                   <input type="text" id="vehicle" placeholder="Vehicle"></input>
-                  <input type="text" id="time" style="display:none;"></input>
+                  <input type="text" id="time" value="19998" style="display:none;"></input>
                   <a class="btn btn-success save">Save</a>
               </div>
-              <div id="leaderboard"></div>
+              <table class="table">
+                  <thead>
+                      <tr>
+                          <th style="text-align:center;">#</th>
+                          <th style="text-align:center;">Email</th>
+                          <th style="text-align:center;">Vehicle</th>
+                          <th style="text-align:center;">Map</th>
+                          <th style="text-align:center;">Time</th>
+                      </tr>
+                  </thead>
+                  <tbody id="leaderboard">
+                  </tbody>
+              </table>
               <div id="sidebar"></div>
               <div id="map-canvas"></div>
               <br>
@@ -69,21 +81,13 @@
         </footer>
 
         <script type="text/template" id="tpl-race-list-item">
-        	<a href='#races/<%= id %>'><%= name %></a>
-        </script>
-        <script type="text/template" id="tpl-race-details">
-            <div class="form-left-col">
-                <label>Id:</label>
-                <input type="text" id="raceId" name="id" value="<%= id %>" disabled />
-                <label>Email:</label>
-                <input type="text" id="email" name="email" value="<%= email %>" required/>
-                <label>Vehicle:</label>
-                <input type="text" id="vehicle" name="vehicle" value="<%= vehicle %>"/>
-                <label>Map:</label>
-                <input type="text" id="map" name="map" value="<%= map %>"/>
-                <label>Time:</label>
-                <input type="text" id="time" name="time"  value="<%= time %>"/>
-            </div>
+        	<tr>
+                <td>1</td>
+                <td><%= get('email') %></td>
+                <td><%= get('vehicle') %></td>
+                <td><%= get('map') %></td>
+                <td><%= get('time') / 1000 %> Seconds</td>
+            </tr>
         </script>
         <!--<script src="js/jquery-1.9.1.min.js"></script>  //ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -94,6 +98,7 @@
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&v=3&libraries=geometry"></script>
         <script>
         function initialize() {
+            console.warn($('#time').val());
           var mapOptions = {
             zoom: 6,
             mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -152,11 +157,13 @@
 
               if (google.maps.geometry.spherical.computeDistanceBetween(newPointOne, B) < 15) {
                   endTime = Date.now();
-                  alert('You finished the race! Hit the save button');
                   console.log('end time' + endTime);
-                  finalTime = (endTime - startTime) / 1000;
+                  finalTime = endTime - startTime;
                   console.warn('final time' + finalTime);
-                  $('#time').attr('value', finalTime);
+                  console.log($('#time').attr('value'));
+                  $('#time').val(finalTime);
+                  console.log($('#time').attr('value'));
+
               }
           });
 

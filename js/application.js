@@ -1,4 +1,4 @@
-window.Race = Backbone.Model.extend({
+var Race = Backbone.Model.extend({
   urlRoot:"http://hackru.alexvallorosi.com/races",
   defaults:{
     "id":null,
@@ -9,44 +9,43 @@ window.Race = Backbone.Model.extend({
   }
 });
 
-window.Races = Backbone.Collection.extend({
+var Races = Backbone.Collection.extend({
   model:Race,
   url:"http://hackru.alexvallorosi.com/races"
 });
 
 var RaceListView = Backbone.View.extend({
 
+    template:_.template($('#tpl-race-list-item').html()),
+
     initialize:function () {
         console.log("RaceListView init");
-        this.model.bind("reset", this.render, this);
+        _.bindAll(this, "render");
+        this.model.bind('change', this.render);
     },
 
     render:function (eventName) {
-        console.log("RaceListView Render");
-        _.each(this.model.models, function (model) {
-            $('#leaderboard').append(new RaceListItemView({model:model}).render().el);
-        }, this);
+        var self = this;
+        this.model.fetch().done(function() {
+            console.log("RaceListView Render");
+            console.warn(self.model);
+
+            self.model.models.comparator = "time";
+            self.model.models.sort();
+
+            console.warn(self.model.models);
+
+            _.each(self.model.models, function (model) {
+                this.$el.append(this.template(model));
+            }, self);
+        });
+
         return this;
     }
 
-});
-
-var RaceListItemView = Backbone.View.extend({
-
-    tagName:'div',
-
-    template:_.template($('#tpl-race-list-item').html()),
-
-    render:function (eventName) {
-        console.log("RaceListItemView Render");
-        this.$el.html(this.template(this.model.toJSON()));
-        return this;
-    }
 });
 
 var RaceView = Backbone.View.extend({
-
-  template:_.template($('#tpl-race-details').html()),
 
   events: {
     'click .save':'saveRace'
@@ -79,7 +78,7 @@ var RaceView = Backbone.View.extend({
         email: $('#email').val(),
         vehicle: $('#vehicle').val(),
         map: $('#map').val(),
-        time: $('#time').html()
+        time: $('#time').val()
     });
 
     //this is stupid
@@ -101,11 +100,14 @@ var AppRouter = Backbone.Router.extend({
 
     list:function () {
 		console.log("list()");
-        this.raceList = new Races();
-        console.warn(this.raceList);
-        this.raceListView = new RaceListView({model:this.raceList, el:'#leaderboard'});
-        this.raceList.fetch();
-        $('#leaderboard').html(this.raceListView.render().el);
+        // this.raceList = new Races();
+        // this.raceList.fetch();
+
+        var raceList = new Races();
+        this.raceListView = new RaceListView({model:raceList, el:'#leaderboard'});
+
+        this.raceListView.render();
+        // $('#leaderboard').html(this.raceListView.render().el);
     },
 
     raceDetails:function (id) {
