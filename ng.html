@@ -1,7 +1,6 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app>
     <head>
-        <!-- Template the <head> -->
         <title>Get There First</title>
         <link href="css/bootstrap.css" rel="stylesheet">
         <style>
@@ -11,15 +10,18 @@
                 padding: 0px
               }
         </style>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
+        <script src="js/ng.js"></script>
     </head>
     <body>
         <div id="fb-root"></div>
-        <script src="//connect.facebook.net/en_US/all.js"></script>
+        <script src="http://connect.facebook.net/en_US/all.js"></script>
         <script>
           window.fbAsyncInit = function() {
           FB.init({
             appId      : '528842820526587', // App ID
-            channelUrl : '//hackru.alexvallorosi.com/channel.html', // Channel File
+            channelUrl : 'http://hackru.alexvallorosi.com/channel.html', // Channel File
             status     : true, // check login status
             cookie     : true, // enable cookies to allow the server to access the session
             xfbml      : true  // parse XFBML
@@ -61,7 +63,7 @@
            var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
            if (d.getElementById(id)) {return;}
            js = d.createElement('script'); js.id = id; js.async = true;
-           js.src = "//connect.facebook.net/en_US/all.js";
+           js.src = "http://connect.facebook.net/en_US/all.js";
            ref.parentNode.insertBefore(js, ref);
           }(document));
 
@@ -75,9 +77,7 @@
               $("#email").val(response.name);
             });
           }
-
         </script>
-        <!-- Template the navbar -->
         <div class="navbar navbar-default navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
@@ -108,7 +108,7 @@
           </div>
         </div>
 
-        <div class="container">
+        <div class="container" ng-controller="RaceController">
           <div class="row">
             <div class="col-lg-12" style="text-align:center;height:450px;">
               <h2>Sign Up Today!</h2>
@@ -118,7 +118,7 @@
                   <input type="text" id="email" placeholder="Email"></input>
                   <input type="text" id="vehicle" placeholder="Vehicle"></input>
                   <input type="text" id="time" value="19998" style="display:none;"></input>
-                  <a class="btn btn-success save">Save</a>
+                  <a class="btn btn-success save" ng-click="submit()">Save</a>
               </div>
               <table class="table">
                   <thead>
@@ -130,9 +130,16 @@
                       </tr>
                   </thead>
                   <tbody id="leaderboard">
+                      <tr ng-repeat="race in races">
+                          <td>{{ race.email.replace("fuck", "****"); }}</td>
+                          <td>{{ race.vehicle.replace("dildo", "*****"); }}</td>
+                          <td>A</td>
+                          <td>{{ race.time / 1000 }} Seconds</td>
+                          <td><button ng-click="delete($index)">Delete Entry</button>
+                      </tr>
                   </tbody>
               </table>
-              <div id="sidebar"></div>
+
               <div id="map-canvas"></div>
               <br>
             </div>
@@ -140,29 +147,10 @@
 
         </div>
 
-        <footer>
-            <div class="container">
-            </div>
-        </footer>
-
-        <script type="text/template" id="tpl-race-list-item">
-        	<tr>
-                <td><%= get('email') %></td>
-                <td><%= get('vehicle') %></td>
-                <td><%= get('map') %></td>
-                <td><%= get('time') / 1000 %> Seconds</td>
-            </tr>
-        </script>
-        <!--<script src="js/jquery-1.9.1.min.js"></script>  //ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js -->
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
-        <script src="js/underscore.js"></script>
-        <script src="js/backbone.js"></script>
-        <script src="js/application.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&v=3&libraries=geometry"></script>
         <script>
         function initialize() {
-            console.warn($('#time').val());
           var mapOptions = {
             zoom: 6,
             mapTypeId: google.maps.MapTypeId.ROADMAP
